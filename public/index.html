@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<style>
+input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: 100%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+#btn{
+    width: 100%;
+  background-color: #022272;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover{
+    background-color: #340272;
+}
+
+div {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+th, td, p, input {
+            font:14px Verdana;
+        }
+        table, th, td 
+        {
+            border: solid 1px rgb(55, 72, 131);
+            border-collapse: collapse;
+            padding: 10px 40px;
+            text-align: center;
+            background: lightblue;;
+        }
+        th {
+            font-weight:bold;
+        }
+        .parent {
+       height: 200px;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+     }
+    .child {
+     width: 100px;
+     height: 100px;
+    }
+</style>
+<body>
+
+<h3>Using CSS to style an HTML Form</h3>
+
+<div>
+  <form action="/formData" method="post">
+    <label for="fname">First Name</label>
+    <input type="text" id="fname" name="fname" placeholder="Your name..">
+
+    <label for="lname">Last Name</label>
+    <input type="text" id="lname" name="lname" placeholder="Your last name..">
+
+    <label for="country">Country</label>
+    <select id="country" name="country">
+      <option value="australia">Australia</option>
+      <option value="canada">Canada</option>
+      <option value="usa">USA</option>
+    </select>
+  
+    <input type="submit" value="Submit">
+  </form>
+
+  <!-- <a target="_self" href="a.html"> <button id="btn">AllData</button></a> -->
+ <button id="btn" onclick="CreateTableFromJSON()">AllData</button>
+ <div class="parent">
+    <div class="child" id="showData"></div>
+</div>
+ 
+</div>
+
+</body>
+
+<script>
+    var myBooks;
+    function CreateTableFromJSON() {
+        
+        fetch('http://localhost:7000/formValue')
+        .then(response=>response.json())
+        .then(data=>{
+            myBooks=data
+            console.log(myBooks)
+
+            var col = [];
+        for (var i = 0; i < myBooks.data.length; i++) {
+            for (var key in myBooks.data[i]) {
+                if (col.indexOf(key) === -1) {
+                    col.push(key);
+                }
+            }
+        }
+
+        // CREATE DYNAMIC TABLE.
+        var table = document.createElement("table");
+
+        // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+
+        var tr = table.insertRow(-1);                   // TABLE ROW.
+
+        for (var i = 0; i < col.length; i++) {
+            var th = document.createElement("th");      // TABLE HEADER.
+            th.innerHTML = col[i];
+            tr.appendChild(th);
+        }
+
+        // ADD JSON DATA TO THE TABLE AS ROWS.
+        for (var i = 0; i < myBooks.data.length; i++) {
+
+            tr = table.insertRow(-1);
+
+            for (var j = 0; j < col.length; j++) {
+                var tabCell = tr.insertCell(-1);
+                tabCell.innerHTML = myBooks.data[i][col[j]];
+            }
+        }
+        // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+        var divContainer = document.getElementById("showData");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(table);
+        });
+
+      
+
+        // EXTRACT VALUE FOR HTML HEADER. 
+        // ('Book ID', 'Book Name', 'Category' and 'Price')
+       
+       // console.log(allData)
+    }
+</script>
+</html>
+
+
