@@ -279,6 +279,7 @@ app.get('/user/:username', async (req, res, next) => {
 
 //signup user
 app.post('/signup', (req, res) => {
+  //var arrr3=[];
   console.log(req.body);
   bcrypt.hash(req.body.password, 10, (err, hash) => {
     if (err) {
@@ -292,6 +293,7 @@ app.post('/signup', (req, res) => {
         email: req.body.email,
         password: hash
       });
+      //arrr3.push(userData);
       userData.save();
       //const data1=`<h1>uers data save inside databases.</h1>`
       res.send({
@@ -371,7 +373,7 @@ catch(err){
 });
 
 //delete the user
-app.use('/user/:username',async(req,res,next)=>{
+app.delete('/user/:username',async(req,res,next)=>{
   try{
     var user = req.params.username;
   const data = await userDetails.deleteOne({ userName: user });
